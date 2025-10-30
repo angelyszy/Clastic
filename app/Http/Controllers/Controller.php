@@ -1,5 +1,15 @@
-public function index()
+use Illuminate\Support\Facades\Auth;
+
+public function login(Request $request)
 {
-    $orders = PickupOrder::with(['user', 'assignments.driver'])->get();
-    return view('pickup-orders', compact('orders'));
+    $credentials = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
+
+    if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
+        return redirect()->intended('dashboard');
+    }
+
+    return back()->withErrors(['email' => 'Invalid credentials']);
 }

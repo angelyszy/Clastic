@@ -2,13 +2,25 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
-    protected $table = 'article';
-    protected $primaryKey = 'article_id';
-    public $timestamps = false;
+    use HasFactory;
 
-    public function views() { return $this->hasMany(UserArticleView::class, 'article_id', 'article_id'); }
+    protected $table = 'article';
+
+    protected $fillable = [
+        'title',
+        'content',
+        'summary',
+        'featured_image_url',
+    ];
+
+    // Relationships
+    public function views()
+    {
+        return $this->hasMany(UserArticleView::class, 'article_id');
+    }
 }

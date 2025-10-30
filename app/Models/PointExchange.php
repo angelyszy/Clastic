@@ -5,17 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserMission extends Model
+class PointExchange extends Model
 {
     use HasFactory;
 
-    protected $table = 'user_mission';
+    protected $table = 'point_exchange';
 
     protected $fillable = [
         'user_id',
-        'status',
-        'points_earned',
-        'current_progress',
+        'points_exchanged',
+        'cash_amount',
+        'payment_method',
+        'payment_account_number',
+        'payment_phone_number',
+    ];
+
+    protected $casts = [
+        'cash_amount' => 'decimal:2',
     ];
 
     // Relationships

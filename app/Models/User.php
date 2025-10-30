@@ -2,18 +2,69 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class User extends Model
+class User extends Authenticatable
 {
-    protected $table = 'user';
-    protected $primaryKey = 'user_id';
-    public $timestamps = false;
+    use HasFactory, Notifiable;
 
-    public function pickupOrders() { return $this->hasMany(PickupOrder::class, 'user_id', 'user_id'); }
-    public function classifications() { return $this->hasMany(PlasticClassification::class, 'user_id', 'user_id'); }
-    public function missions() { return $this->hasMany(UserMission::class, 'user_id', 'user_id'); }
-    public function transactions() { return $this->hasMany(Transaction::class, 'user_id', 'user_id'); }
-    public function views() { return $this->hasMany(UserArticleView::class, 'user_id', 'user_id'); }
-    public function exchanges() { return $this->hasMany(PointExchange::class, 'user_id', 'user_id'); }
+    protected $table = 'user';
+
+    protected $fillable = [
+        'name',
+        'email',
+        'password_hash',
+    ];
+
+    protected $hidden = [
+        'password_hash',
+    ];
+
+    public function getAuthPassword()
+    {
+        return $this->password_hash;
+    }
+
+    // ✅ CORRECTED RELATIONSHIPS
+    public function driver()
+    {
+        return $this->hasOne(Driver::class);
+    }
+
+    public function pickupOrders()
+    {
+        return $this->hasMany(PickupOrder::class);
+    }
+
+    public function dropoffOrders()
+    {
+        return $this->hasMany(DropoffOrder::class);
+    }
+
+    public function classifications()
+    {
+        return $this->hasMany(PlasticClassification::class);
+    }
+
+    public function missions()
+    {
+        return $this->hasMany(UserMission::class);
+    }
+
+    public function pointExchanges()
+    {
+        return $this->hasMany(PointExchange::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function articleViews()
+    {
+        return $this->hasMany(UserArticleView::class);
+    }
 }
